@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ public class User {
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Exclude
-    private long id;
+    private UserOrganizationKey id;
 
     @Column
     @JsonProperty
@@ -42,5 +44,9 @@ public class User {
     private String phone;
 
     @ManyToMany
+    @JoinTable(
+        name = "user_org",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "org_id"))
     private Set<Organization> organizations;
 }

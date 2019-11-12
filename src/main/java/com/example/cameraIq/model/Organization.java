@@ -33,6 +33,6 @@ public class Organization {
     @JsonProperty
     private String phone;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "organizations")
     private Set<User> users;
 }

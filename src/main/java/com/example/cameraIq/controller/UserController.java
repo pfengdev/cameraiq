@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -23,14 +23,15 @@ public class UserController {
 
     @GetMapping(value = "/users", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<User>> getUsers() {
-         List<User> result = StreamSupport
+    public ResponseEntity<Set<User>> getUsers() {
+         Set<User> result = StreamSupport
                  .stream(userRepository.findAll().spliterator(), false)
-                 .collect(Collectors.toList());
+                 .collect(Collectors.toSet());
          return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/users", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/users/registration", consumes = "application/json", produces =
+                 "application/json")
     @ResponseBody
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User result = userRepository.save(user);

@@ -19,7 +19,7 @@ public class UserControllerTest {
 
 	private Faker faker;
 	
-	private String baseUrl = "http://localhost:8080/users";
+	private String baseUrl = "http://localhost:8080/users/registration";
 
 	public void beforeClass() {
 		faker = new Faker();
