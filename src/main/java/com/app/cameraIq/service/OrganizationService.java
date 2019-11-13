@@ -25,6 +25,10 @@ public class OrganizationService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Gets all the organizations
+     * @return the set of all organizations
+     */
     public Set<Organization> getOrganizations() {
         Set<Organization> result = StreamSupport
                 .stream(orgRepository.findAll().spliterator(), false)
@@ -32,6 +36,12 @@ public class OrganizationService {
         return result;
     }
 
+    /**
+     * Gets all the users for the existing organization
+     * @param id the id of the existing org
+     * @return the set of users for the org
+     * @throws EntityNotFoundException if the org does not exist
+     */
     public Set<User> getUsersForOrganization(@PathVariable long id) throws EntityNotFoundException {
         Optional<Organization> organization = orgRepository.findById(id);
         if (organization.isPresent()) {
@@ -40,6 +50,13 @@ public class OrganizationService {
         throw new EntityNotFoundException();
     }
 
+    /**
+     * Creates new organization
+     * @param org the request body of the organization to be created
+     * @return the newly created organization
+     * @throws NoSuchFieldException if required fields are null
+     * @throws EntityExistsException if an organization with the same name already exists
+     */
     public Organization createOrganization(@RequestBody Organization org) throws NoSuchFieldException, EntityExistsException {
         if (org.getName() == null) {
             throw new NoSuchFieldException();
@@ -51,6 +68,14 @@ public class OrganizationService {
         return result;
     }
 
+    /**
+     * Adds an existing user to an existing organization by adding it to the
+     * organization's users
+     * @param orgId the id of the existing org
+     * @param userId the id of the existing user
+     * @return the updated organization
+     * @throws EntityNotFoundException if the org or user does not exist
+     */
     public Organization addUserToOrg(@PathVariable long orgId,
                                      @PathVariable long userId) throws EntityNotFoundException {
         Optional<Organization> organization = orgRepository.findById(orgId);
@@ -65,6 +90,14 @@ public class OrganizationService {
         throw new EntityNotFoundException();
     }
 
+    /**
+     * Deletes an existing user from an existing organization by removing it from
+     * the organization's users
+     * @param orgId the id of the existing org
+     * @param userId the id of the existing user
+     * @return the updated organization
+     * @throws EntityNotFoundException if the org or user does not exist
+     */
     public Organization deleteUserFromOrg(@PathVariable long orgId,
                                           @PathVariable long userId) throws EntityNotFoundException {
         Optional<Organization> organization = orgRepository.findById(orgId);

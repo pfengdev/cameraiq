@@ -21,6 +21,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Gets all the users
+     * @return the set of all users
+     */
     public Set<User> getUsers() {
         Set<User> result = StreamSupport
                 .stream(userRepository.findAll().spliterator(), false)
@@ -28,6 +32,12 @@ public class UserService {
         return result;
     }
 
+    /**
+     * Gets all the orgs for the existing user
+     * @param id the id of the existing user
+     * @return the set of orgs for the user
+     * @throws EntityNotFoundException if the user does not exist
+     */
     public Set<Organization> getOrganizationsForUser(@PathVariable long id) throws EntityNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
@@ -37,6 +47,13 @@ public class UserService {
         throw new EntityNotFoundException();
     }
 
+    /**
+     * Creates new user
+     * @param user the request body of the user to be created
+     * @return the newly created user
+     * @throws NoSuchFieldException if required fields are null
+     * @throws EntityExistsException if a user with the same name already exists
+     */
     public User createUser(@RequestBody User user) throws EntityExistsException, NoSuchFieldException {
         if (user.getFirstName() == null) {
             throw new NoSuchFieldException();
