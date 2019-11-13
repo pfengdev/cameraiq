@@ -1,24 +1,28 @@
 package com.example.cameraIq.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
-@Data
-@EqualsAndHashCode
+@Getter
+@Setter
 public class Organization {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Exclude
     private long id;
 
     @Column
@@ -33,6 +37,11 @@ public class Organization {
     @JsonProperty
     private String phone;
 
-    @ManyToMany(mappedBy = "organizations")
+    @ManyToMany(fetch = FetchType.EAGER,  cascade= CascadeType.MERGE)
+    @JoinTable(
+            name = "organization_user",
+            joinColumns = @JoinColumn(name = "organization_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonIgnore
     private Set<User> users;
 }
