@@ -41,7 +41,7 @@ public class User {
     @Column
     private String phone;
 
-    @ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy="users", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Organization> orgs;
 

@@ -36,7 +36,7 @@ public class Organization {
     @Column
     private String phone;
 
-    @ManyToMany(fetch = FetchType.EAGER,  cascade= CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.LAZY,  cascade= CascadeType.MERGE)
     @JoinTable(
             name = "organization_user",
             joinColumns = @JoinColumn(name = "organization_id"),
