@@ -1,7 +1,7 @@
 CREATE TABLE USER (
     id  IDENTITY NOT NULL  PRIMARY KEY
-    VARCHAR(255) firstName,
-    VARCHAR(255) lastName,
+    VARCHAR(255) firstName NOT NULL,
+    VARCHAR(255) lastName NOT NULL,
     VARCHAR(255) email NOT NULL UNIQUE,
     VARCHAR(255) address,
     VARCHAR(255) phone

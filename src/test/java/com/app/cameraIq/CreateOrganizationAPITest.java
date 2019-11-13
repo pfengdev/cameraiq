@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
@@ -14,7 +15,7 @@ import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {RestTemplate.class})
-public class OrganizationAPITest {
+public class CreateOrganizationAPITest {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -35,20 +36,24 @@ public class OrganizationAPITest {
 
     @Test
     public void testCreateSameOrganizationTwice() {
-        Organization organization = createOrganization();
-        restTemplate.postForEntity(baseUrl, organization, Organization.class);
-        ResponseEntity result = restTemplate.postForEntity(baseUrl, organization, Organization.class);
-        assertEquals(result.getStatusCode().value(), HTTP_BAD_REQUEST);
+        Organization request = createOrganization();
+        restTemplate.postForEntity(baseUrl, request, Organization.class);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, Organization.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
     }
 
     @Test
     public void testCreateOrganizationRequiredName() {
         Organization request = createOrganization();
         request.setName(null);
-        ResponseEntity result = restTemplate.postForEntity(baseUrl, request, Organization.class);
-        assertEquals(result.getStatusCode().value(), HTTP_CREATED);
-        Organization response = (Organization)result.getBody();
-        assertOrgsEqual(request, response);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, Organization.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
@@ -13,7 +14,7 @@ import static java.net.HttpURLConnection.HTTP_CREATED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(classes = {RestTemplate.class})
-public class UserAPITest {
+public class CreateUserAPITest {
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -33,34 +34,46 @@ public class UserAPITest {
 
 	@Test
 	public void testCreateSameUserTwice() {
-		User user = createUser();
-		restTemplate.postForEntity(baseUrl, user, User.class);
-		ResponseEntity result = restTemplate.postForEntity(baseUrl, user, User.class);
-		assertEquals(result.getStatusCode().value(), HTTP_BAD_REQUEST);
+		User request = createUser();
+		restTemplate.postForEntity(baseUrl, request, User.class);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
 	}
 
 	@Test
 	public void testCreateUserRequiredFirstName() {
 		User request = createUser();
 		request.setFirstName(null);
-		ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
-		assertEquals(result.getStatusCode().value(), HTTP_BAD_REQUEST);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
 	}
 
 	@Test
 	public void testCreateUserRequiredLastName() {
 		User request = createUser();
 		request.setLastName(null);
-		ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
-		assertEquals(result.getStatusCode().value(), HTTP_BAD_REQUEST);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
 	}
 
 	@Test
 	public void testCreateUserRequiredEmail() {
 		User request = createUser();
 		request.setEmail(null);
-		ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
-		assertEquals(result.getStatusCode().value(), HTTP_BAD_REQUEST);
+        try {
+            ResponseEntity result = restTemplate.postForEntity(baseUrl, request, User.class);
+        } catch (HttpClientErrorException ex) {
+            assertEquals(ex.getRawStatusCode(), HTTP_BAD_REQUEST);
+        }
 	}
 
 	@Test

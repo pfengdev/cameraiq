@@ -1,7 +1,6 @@
 package com.app.cameraIq.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,10 +43,4 @@ public class Organization {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonIgnore
     private Set<User> users;
-
-    public boolean equals(Organization org) {
-        return org.getName().equals(this.getName()) &&
-                org.getAddress().equals(this.getAddress()) &&
-                org.getPhone().equals(this.getPhone());
-    }
 }

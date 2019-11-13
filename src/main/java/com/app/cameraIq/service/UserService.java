@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,27 +28,27 @@ public class UserService {
         return result;
     }
 
-    public Set<Organization> getOrganizationsForUser(@PathVariable long id) throws Exception {
+    public Set<Organization> getOrganizationsForUser(@PathVariable long id) throws EntityNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             Set<Organization> result = user.get().getOrgs();
             return result;
         }
-        throw new Exception();
+        throw new EntityNotFoundException();
     }
 
-    public User createUser(@RequestBody User user) throws Exception {
+    public User createUser(@RequestBody User user) throws EntityExistsException, NoSuchFieldException {
         if (user.getFirstName() == null) {
-            throw new Exception();
+            throw new NoSuchFieldException();
         }
         if (user.getLastName() == null) {
-            throw new Exception();
+            throw new NoSuchFieldException();
         }
         if (user.getEmail() == null) {
-            throw new Exception();
+            throw new NoSuchFieldException();
         }
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new Exception();
+            throw new EntityExistsException();
         }
         User result = userRepository.save(user);
         return result;
