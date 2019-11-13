@@ -48,11 +48,4 @@ public class User {
     @JsonIgnore
     private Set<Organization> orgs;
 
-    public boolean equals(User user) {
-        return user.getFirstName().equals(this.getFirstName()) &&
-                user.getLastName().equals(this.getLastName()) &&
-                user.getEmail().equals(this.getEmail()) &&
-                user.getAddress().equals(this.getAddress()) &&
-                user.getPhone().equals(this.getPhone());
-    }
 }
